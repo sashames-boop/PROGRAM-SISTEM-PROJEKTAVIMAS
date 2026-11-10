@@ -1,2 +1,24 @@
-<h1> Natomanija </h1>
-<p> Labas ne kebabas </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Natomanija </title>
+</head>
+<body>
+    <h1> Natomanija </h1>
+    <form id="transpose-form">
+        <label for="progression">Akordu seka:</label>
+        <textarea id="progression" name="progression" required>C Am F G</textarea>
+
+        <label for="steps">Poslinkis pustoniais:</label>
+        <button type="button" id="minus">-</button>
+        <input id="steps" name="steps" type="number" value="0" required>
+        <button type="button" id="plus">+</button>
+
+        <button type="submit">Transponuoti</button>
+    </form>
+
+<p id="result" aria-live="polite"></p>
+<script src="app.js"></script>
+</body>
+</html>
