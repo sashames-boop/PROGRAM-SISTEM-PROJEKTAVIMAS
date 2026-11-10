@@ -36,10 +36,7 @@ public class Transposition {
             throw new IllegalArgumentException("Mazorines ir minorines tonacijos tarpusavyje netransponuojamos.");
         }
 
-        int transposition = Math.floorMod(endInd - startInd, 12);
-        if (transposition > 6) {
-            transposition -= 12;
-        }
+        int transposition = transposeIndex(startKey, endKey);
 
         return transposeByStep(progression, transposition);
 
@@ -85,8 +82,18 @@ public class Transposition {
                 result.append("m");
             }
         }
-        System.out.println("transposition: " + transposition);
 
         return result.toString();
+    }
+
+    public Integer transposeIndex(String startKey, String endKey) {
+        int startInd = findNoteIndex(startKey);
+        int endInd = findNoteIndex(endKey);
+
+        int transposition = Math.floorMod(endInd - startInd, 12);
+        if (transposition > 6) {
+            transposition -= 12;
+        }
+        return transposition;
     }
 }
