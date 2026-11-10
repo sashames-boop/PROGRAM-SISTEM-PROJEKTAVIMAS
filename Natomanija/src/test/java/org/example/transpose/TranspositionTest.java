@@ -76,5 +76,7 @@ public class TranspositionTest {
     }
 
     @Test
-    protected void transposeWith() {}
+    protected void transposeWithFlat() {
+        assertEquals("D", t.transpose("C", "E", "Bb"));
+    }
 }
