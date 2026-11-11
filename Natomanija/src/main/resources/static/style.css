@@ -1,0 +1,15 @@
+body {
+    background-color: deeppink;
+    font-family: Gadugi;
+    position: relative;
+    text-align: center;
+}
+
+h1 {
+    color: lawngreen;
+    margin-left: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    /*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);*/
+    text-transform: uppercase;
+}
