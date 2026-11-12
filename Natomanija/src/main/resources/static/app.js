@@ -21,14 +21,14 @@ async function updateResult() {
         const text = await response.text();
         if(requestId !== latestRequest) return;
 
-        result.textContent = response.ok ? text : 'Klaida';
+        result.textContent = text;
 
     } catch (error) {
         if(requestId !== latestRequest) return;
-        result.textContent = 'Klaida: nepavyko susisiekti su serveriu.';
+        result.textContent = 'Klaida: nepavyko susisiekti su serveriu:<';
     }
 }
-
+//Pirma forma
 form.addEventListener('submit', event => {
     event.preventDefault();
     updateResult();
@@ -42,3 +42,29 @@ document.getElementById("minus").addEventListener('click', () => {
     updateResult();
 });
 steps.addEventListener("change", updateResult);
+
+
+//Antra forma
+const keyForm = document.getElementById('transpose-by-key-form');
+const keyResult = document.getElementById('key-result');
+let latestKeyRequest = 0;
+
+keyForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const requestId = ++latestKeyRequest;
+
+    keyResult.textContent = "Transponuojama...";
+
+    try {
+        const response = await fetch("/api/transpose-by-key", {
+            method: 'POST',
+            body: new URLSearchParams(new FormData(keyForm))
+        });
+        const text = await response.text();
+        if(requestId !== latestKeyRequest) return;
+        keyResult.textContent = text;
+    } catch (error) {
+        if(requestId !== latestKeyRequest) return;
+        keyResult.textContent = 'Klaida: Nepavyko susisiekti su serveriu:<';
+    }
+})
