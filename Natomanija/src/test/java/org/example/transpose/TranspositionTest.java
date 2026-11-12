@@ -75,8 +75,10 @@ public class TranspositionTest {
 //        System.out.println("Transposition result = " + result + " |" + symbol + transposition);
     }
 
+    // test 4 - additional
     @Test
     protected void transposeWithFlat() {
-        assertEquals("D", t.transpose("C", "E", "Bb"));
+        assertEquals("D", t.transpose("C", "E", "B♭"));
+        assertEquals("Dm", t.transpose("C", "E", "B♭m"));
     }
 }
