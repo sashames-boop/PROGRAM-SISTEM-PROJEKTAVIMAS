@@ -21,7 +21,7 @@ async function updateResult() {
         const text = await response.text();
         if(requestId !== latestRequest) return;
 
-        result.textContent = response.ok ? text : 'Klaida';
+        result.textContent = response.ok ? text : 'Klaida: ' + text;
 
     } catch (error) {
         if(requestId !== latestRequest) return;

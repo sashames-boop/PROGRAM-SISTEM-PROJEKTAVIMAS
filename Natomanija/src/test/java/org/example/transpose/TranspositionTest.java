@@ -76,7 +76,52 @@ public class TranspositionTest {
     }
 
     @Test
-    protected void transposeWithFlat() {
-        assertEquals("D", t.transpose("C", "E", "Bb"));
+    protected void rejectsFlatChord() {
+        IllegalArgumentException error = assertThrows(
+                IllegalArgumentException.class,
+                () -> t.transpose("C", "E", "Bb")
+        );
+
+        assertTrue(error.getMessage().contains("Bb"));
+    }
+
+    @Test
+    protected void transposeDownOneSemitone() {
+        String actual = t.transposeByStep("C Am F G", -1);
+
+        assertEquals("B G#m E F#", actual);
+    }
+
+    @Test
+    protected void transposeByZeroKeepsUnchanged() {
+        String actual = t.transposeByStep("C Am F G", 0);
+
+        assertEquals("C Am F G", actual);
+    }
+
+    @Test
+    protected void rejectsMajorToMinorTransposition() {
+        IllegalArgumentException error = assertThrows(
+                IllegalArgumentException.class,
+                () -> t.transpose("C", "Am", "C Am F G")
+        );
+
+        assertTrue(error.getMessage().contains("Mazorines ir minorines"));
+    }
+
+    @Test
+    protected void rejectsMinorToMajorTransposition() {
+        IllegalArgumentException error = assertThrows(
+                IllegalArgumentException.class,
+                () -> t.transpose("Am", "C", "Am C Dm E")
+        );
+
+        assertTrue(error.getMessage().contains("Mazorines ir minorines"));
+    }
+
+    @Test
+    protected void choosesPositiveSix() {
+        assertEquals(6, t.transposeIndex("C", "F#"));
+        assertEquals(6, t.transposeIndex("F#", "C"));
     }
 }
