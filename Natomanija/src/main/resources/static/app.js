@@ -25,10 +25,10 @@ async function updateResult() {
 
     } catch (error) {
         if(requestId !== latestRequest) return;
-        result.textContent = 'Klaida: nepavyko susisiekti su serveriu:<';
+        result.textContent = 'Klaida: nepavyko susisiekti su serveriu.';
     }
 }
-//Pirma forma
+
 form.addEventListener('submit', event => {
     event.preventDefault();
     updateResult();
