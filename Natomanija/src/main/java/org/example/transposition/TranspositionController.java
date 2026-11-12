@@ -21,4 +21,18 @@ public class TranspositionController {
         }
 
     }
+
+
+    @PostMapping("/api/transpose-by-key")
+    public ResponseEntity<String> transposeByKey(@RequestParam("startKey") String startKey, @RequestParam("endKey") String endKey,
+                                                 @RequestParam("progression") String progression) {
+        try {
+            String result = transposition.transpose(startKey, endKey, progression);
+            int steps = transposition.transpositionIndex(startKey.trim(), endKey.trim());
+            String interval = steps > 0 ? "+" + steps : String.valueOf(steps);
+            return ResponseEntity.ok(interval + " pustoniai | " + result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Klaida: " + e.getMessage());
+        }
+    }
 }

@@ -24,7 +24,7 @@ public class Transposition {
 
     public String transpose(String startKey, String endKey, String progression) {
         if (startKey == null || endKey == null || progression == null || progression.isBlank()) {
-            throw new IllegalArgumentException("Tonacijos ir akordu seka turi buti pateiktos.");
+            throw new IllegalArgumentException("Tonacijos ir akordų seka turi būti pateiktos.");
         }
 
         startKey = startKey.trim();
@@ -33,10 +33,10 @@ public class Transposition {
         int endInd = findNoteIndex(endKey);
 
         if (startKey.endsWith("m") != endKey.endsWith("m")) {
-            throw new IllegalArgumentException("Mazorines ir minorines tonacijos tarpusavyje netransponuojamos.");
+            throw new IllegalArgumentException("Mažorinės ir minorinės tonacijos tarpusavyje netransponuojamos.");
         }
 
-        int transposition = transposeIndex(startKey, endKey);
+        int transposition = transpositionIndex(startKey, endKey);
 
         return transposeByStep(progression, transposition);
 
@@ -44,23 +44,32 @@ public class Transposition {
 
     private int findNoteIndex(String chord) {
         if (chord.length() == 1) chord = chord.toUpperCase(Locale.ROOT);
-        if (!chord.matches("[A-G]#?m?")) {
-            throw new IllegalArgumentException("Neatpazintas akordas arba tonacija: " + chord);
+        if (!chord.matches("[A-G][#b♭]?m?")) {
+            throw new IllegalArgumentException("Neatpažintas akordas arba tonacija: " + chord);
         }
 
         String root = chord.endsWith("m") ? chord.substring(0, chord.length() - 1) : chord;
+        root = switch (root) {
+            case "Db", "D♭" -> "C#";
+            case "Eb", "E♭" -> "D#";
+            case "Gb", "G♭" -> "F#";
+            case "Ab", "A♭" -> "G#";
+            case "Bb", "B♭" -> "A#";
+            default -> root;
+        };
+
         for (Map.Entry<Integer, String> entry : mainNotes.entrySet()) {
             if (entry.getValue().equals(root)) {
                 return entry.getKey();
             }
         }
 
-        throw new IllegalArgumentException("Neatpazinta pagrindine nata: " + root);
+        throw new IllegalArgumentException("Neatpažinta pagrindinė nata: " + root);
     }
 
     public String transposeByStep(String progression, int transposition) {
         if (progression == null || progression.isBlank()) {
-            throw new IllegalArgumentException("Akordu seka turi buti pateikta.");
+            throw new IllegalArgumentException("Akordu seka turi būti pateikta.");
         }
 
         List<String> notes = new ArrayList<>();
@@ -86,7 +95,7 @@ public class Transposition {
         return result.toString();
     }
 
-    public Integer transposeIndex(String startKey, String endKey) {
+    public Integer transpositionIndex(String startKey, String endKey) {
         int startInd = findNoteIndex(startKey);
         int endInd = findNoteIndex(endKey);
 
