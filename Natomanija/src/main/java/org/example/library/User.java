@@ -1,9 +1,6 @@
 package org.example.library;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class User {
@@ -13,6 +10,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private IntrumentType instrument;
 
     public User() {};
