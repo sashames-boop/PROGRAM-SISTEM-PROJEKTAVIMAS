@@ -4,10 +4,10 @@ import jakarta.servlet.http.HttpSession;
 import org.example.library.Song;
 import org.example.service.LibraryService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.NoSuchElementException;
 
 import java.util.List;
 
@@ -30,16 +30,31 @@ public class LibraryController {
         try {
             return libraryService.getSong(songId, userId);
 
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kūrinys nerastas:(");
         }
 
     }
 
+    @PatchMapping("api/songs/{songId}/title")
+    public Song renameSong(@PathVariable("songId") Long songId, @RequestBody RenameSongRequest request,
+                           HttpSession session) {
+        Long userId = userId(session);
+        try {
+            return libraryService.renameSong(songId, userId, request.title());
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
+    public record RenameSongRequest(String title) {}
+
     private Long userId(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if(userId == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pirmiausia pasirinkite naudotoją.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Pirmiausia pasirinkite naudotoją.");
         }
         return userId;
     }
